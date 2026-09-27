@@ -4,14 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.remember
+import com.example.expenselistapp.data.ExpenseStore
 import com.example.expenselistapp.ui.theme.ExpenseListAppTheme
+import com.example.expenselistapp.ui.theme.ExpenseScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +15,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ExpenseListAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val store = remember { (ExpenseStore()) }
+
+                ExpenseScreen(
+                    store = store,
+                    onAddExpense = { amount, category, comment ->
+                        store.add(amount, category, comment)
+                    },
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ExpenseListAppTheme {
-        Greeting("Android")
     }
 }
